@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -90,17 +91,23 @@ function LoginPage() {
             </p>
           </div>
 
-          <button
-            type="submit"
-            className={[
-              "inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 sm:py-3 mt-6 sm:mt-8 text-sm sm:text-base font-medium text-white",
-              "bg-rose-600 hover:bg-rose-700",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-600",
-              "disabled:opacity-60 disabled:pointer-events-none",
-            ].join(" ")}
-          >
-            ورود
-          </button>
+          <div className="relative">
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className={[
+                "inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 sm:py-3 mt-6 sm:mt-8 text-sm sm:text-base font-medium text-white",
+                "bg-rose-600 hover:bg-rose-700",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-600",
+                "disabled:bg-rose-300 disabled:pointer-events-none",
+              ].join(" ")}
+            >
+              ورود
+            </button>
+            {mutation.isPending && (
+              <Loader2 className="h-5 w-5 animate-spin absolute top-[56%] text-white left-[3%]" />
+            )}
+          </div>
 
           <p className="text-xs sm:text-[13px] md:text-sm mt-5 text-slate-500 text-center">
             با ورود، شرایط استفاده را می‌پذیرید.
