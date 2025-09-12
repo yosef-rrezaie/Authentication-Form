@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { addLocalStorage } from "@/lib/LocalStorageAddRm";
 
 function LoginPage() {
   const PATTERN = /^(09\d{9}|\+989\d{9}|00989\d{9})$/;
@@ -20,7 +21,7 @@ function LoginPage() {
       return res.data;
     },
     onSuccess: (data) => {
-      console.log(data.results);
+      addLocalStorage(data.results)
     },
   });
 
