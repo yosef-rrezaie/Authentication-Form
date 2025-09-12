@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 function LoginPage() {
   const PATTERN = /^(09\d{9}|\+989\d{9}|00989\d{9})$/;
@@ -9,6 +11,17 @@ function LoginPage() {
   useEffect(() => {
     input.current?.focus();
   }, []);
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const res = await axios.get(
+        "https://randomuser.me/api/?results=1&nat=us"
+      );
+      return res.data;
+    },
+    onSuccess: (data) => {
+      console.log(data.results);
+    },
+  });
 
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,6 +36,7 @@ function LoginPage() {
       return;
     }
     setInvalidMessage("");
+    mutation.mutate();
   }
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
