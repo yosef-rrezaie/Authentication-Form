@@ -57,17 +57,17 @@ function LoginPage() {
               className={[
                 "w-full rounded-xl border bg-white mt-3 px-3 py-2.5 sm:py-3 text-sm sm:text-base outline-none",
                 "placeholder:text-slate-400",
-                "border-slate-300 focus:border-rose-600 focus:ring-2 focus:ring-rose-600/20",
+                "border-slate-300 focus:border-rose-600  focus:ring-1 focus:ring-rose-600/20 ",
               ].join(" ")}
             />
 
-            <p className="text-xs sm:text-sm text-rose-600">
+            <div className="text-xs sm:text-sm text-rose-600">
               {invalidMessage && (
                 <p className="text-xs sm:text-sm text-rose-600">
                   {invalidMessage}
                 </p>
               )}
-            </p>
+            </div>
           </div>
 
           <div className="relative">

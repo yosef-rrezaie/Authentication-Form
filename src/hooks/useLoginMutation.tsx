@@ -18,5 +18,8 @@ export function useLoginMutation() {
       router.replace("/dashboard");
       toast.success("به داشبورد منتقل می شوید");
     },
+    onError : ()=> {
+        toast.error("خطا در برقراری ارتباط با سرور")
+    }
   });
 }
