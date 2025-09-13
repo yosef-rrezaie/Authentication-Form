@@ -1,39 +1,26 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { addLocalStorage } from "@/lib/LocalStorageAddRm";
 import { useRouter } from "next/navigation";
 import { redirectHandler } from "@/lib/redirects";
 import { submitHandler } from "@/lib/SubmitHandler";
-import toast from "react-hot-toast";
+import { onBlurHandler } from "@/lib/BlurHandler";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
 
 function LoginPage() {
   const router = useRouter();
+  const mutation = useLoginMutation();
   const [invalidMessage, setInvalidMessage] = useState<string>("");
   const [inputValue, setInputValue] = useState<string>("");
   const input = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
-    redirectHandler(router)
+    redirectHandler(router);
     input.current?.focus();
-  }, []);
-  const mutation = useMutation({
-    mutationFn: async () => {
-      const res = await axios.get(
-        "https://randomuser.me/api/?results=1&nat=us"
-      );
-      return res.data;
-    },
-    onSuccess: (data) => {
-      addLocalStorage(data.results);
-      router.replace("/dashboard")
-      toast.success("به داشبورد منتقل می شوید")
-    },
-  });
+  } , []);
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
+    setInvalidMessage("");
   }
 
   return (
@@ -46,7 +33,10 @@ function LoginPage() {
           </p>
         </div>
 
-        <form className="mt-6 sm:mt-8" onSubmit={(e)=>submitHandler(e , inputValue , setInvalidMessage , mutation )}>
+        <form
+          className="mt-6 sm:mt-8"
+          onSubmit={(e) => submitHandler(e, invalidMessage, mutation)}
+        >
           <div className="space-y-2">
             <label
               htmlFor="phone"
@@ -58,6 +48,7 @@ function LoginPage() {
             <input
               value={inputValue}
               onChange={onChangeHandler}
+              onBlur={() => onBlurHandler(inputValue, setInvalidMessage)}
               id="phone"
               type="tel"
               ref={input}
