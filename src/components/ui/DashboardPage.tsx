@@ -62,7 +62,7 @@ function DashboardPage() {
           <h1 className="text-xl sm:text-2xl font-semibold">داشبورد</h1>
 
           {picture && (
-            <Image
+            <img
               width={1000}
               height={1000}
               src={picture.medium}
