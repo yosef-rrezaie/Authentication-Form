@@ -6,10 +6,11 @@ import axios from "axios";
 import { addLocalStorage } from "@/lib/LocalStorageAddRm";
 import { useRouter } from "next/navigation";
 import { redirectHandler } from "@/lib/redirects";
+import { submitHandler } from "@/lib/SubmitHandler";
+import toast from "react-hot-toast";
 
 function LoginPage() {
   const router = useRouter();
-  const PATTERN = /^(09\d{9}|\+989\d{9}|00989\d{9})$/;
   const [invalidMessage, setInvalidMessage] = useState<string>("");
   const [inputValue, setInputValue] = useState<string>("");
   const input = useRef<HTMLInputElement | null>(null);
@@ -27,31 +28,12 @@ function LoginPage() {
     onSuccess: (data) => {
       addLocalStorage(data.results);
       router.replace("/dashboard")
+      toast.success("به داشبورد منتقل می شوید")
     },
   });
 
-  function submitHandler(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const value = inputValue.trim();
-
-    if (!value) {
-      setInvalidMessage("لطفا شماره را وارد کنید");
-      return;
-    }
-    if (!PATTERN.test(value)) {
-      setInvalidMessage("شماره موبایل نادرست است");
-      return;
-    }
-    setInvalidMessage("");
-    mutation.mutate();
-  }
-
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
-    if (invalidMessage) {
-      const v = e.target.value.trim();
-      if (!v || PATTERN.test(v)) setInvalidMessage("");
-    }
   }
 
   return (
@@ -64,7 +46,7 @@ function LoginPage() {
           </p>
         </div>
 
-        <form className="mt-6 sm:mt-8" onSubmit={submitHandler}>
+        <form className="mt-6 sm:mt-8" onSubmit={(e)=>submitHandler(e , inputValue , setInvalidMessage , mutation )}>
           <div className="space-y-2">
             <label
               htmlFor="phone"
