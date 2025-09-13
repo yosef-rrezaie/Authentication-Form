@@ -4,13 +4,17 @@ import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { addLocalStorage } from "@/lib/LocalStorageAddRm";
+import { useRouter } from "next/navigation";
+import { redirectHandler } from "@/lib/redirects";
 
 function LoginPage() {
+  const router = useRouter();
   const PATTERN = /^(09\d{9}|\+989\d{9}|00989\d{9})$/;
   const [invalidMessage, setInvalidMessage] = useState<string>("");
   const [inputValue, setInputValue] = useState<string>("");
   const input = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
+    redirectHandler(router)
     input.current?.focus();
   }, []);
   const mutation = useMutation({
@@ -21,7 +25,8 @@ function LoginPage() {
       return res.data;
     },
     onSuccess: (data) => {
-      addLocalStorage(data.results)
+      addLocalStorage(data.results);
+      router.replace("/dashboard")
     },
   });
 

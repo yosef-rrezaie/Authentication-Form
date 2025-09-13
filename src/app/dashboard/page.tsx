@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { removeLocalStorage } from "@/lib/LocalStorageAddRm";
+import { useRouter } from "next/navigation";
+import { redirectHandler } from "@/lib/redirects";
 
 interface UserName {
   title: string;
@@ -15,11 +17,13 @@ interface UserPicture {
 }
 
 function DashboardPage() {
+  const router = useRouter();
   const [name, setName] = useState<UserName | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [picture, setPicture] = useState<UserPicture | null>(null);
 
   useEffect(() => {
+    redirectHandler(router);
     const storedName = localStorage.getItem("name");
     const storedEmail = localStorage.getItem("email");
     const storedPic = localStorage.getItem("picture");
@@ -51,6 +55,7 @@ function DashboardPage() {
 
   const handleLogout = () => {
     removeLocalStorage();
+    router.replace("/login");
   };
 
   return (
@@ -69,7 +74,7 @@ function DashboardPage() {
 
           {name ? (
             <p className="text-base sm:text-lg font-medium text-rose-600">
-            {name.first} {name.last} خوش آمدی
+              {name.first} {name.last} خوش آمدی
             </p>
           ) : (
             <p className="text-base sm:text-lg font-medium text-rose-600">
@@ -90,7 +95,7 @@ function DashboardPage() {
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-600",
           ].join(" ")}
         >
-           خروج
+          خروج
         </button>
       </div>
     </main>
